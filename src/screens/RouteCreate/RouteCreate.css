@@ -1,0 +1,59 @@
+@import "../../aria/TagGroup.css";
+@import "../../aria/CheckboxGroup.css";
+@import "../../aria/DatePicker.css";
+
+.RouteCreate {
+    background-color: #EBEBEB;
+    border-radius: 20px;
+    max-width: 600px;
+    margin: 0 auto 24px;
+}
+
+.RouteCreate-Inside {
+    padding: 12px;
+}
+
+.Label {
+    font-family: "Proto Grotesk Web";
+    display: flex;
+    color: black;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 20px;
+    line-height: 24px;
+
+    padding-bottom: 16px;
+}
+
+.Label-Big {
+    font-size: 24px;
+    line-height: 28px;
+}
+.CustomRoute {
+    background-color: #F5F5F5;
+    padding: 12px;
+    border-radius: 20px;
+}
+
+.CustomRoute-Filters {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.Toggle {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    border-radius: 12px;
+    padding: 2px;
+}
+
+.Toggle-Transparent {
+    border: none !important;
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: none !important;
+}

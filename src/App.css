@@ -1,16 +1,16 @@
 @font-face {
-  font-family: "Suisse Intl Regular";
-  src: url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.eot");
-  src: url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.eot?#iefix")format("embedded-opentype"),
-  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.woff2")format("woff2"),
-  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.woff")format("woff"),
-  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.ttf")format("truetype"),
-  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.svg#Suisse Intl Regular")format("svg");
+  font-family: "Proto Grotesk Web";
+  src: url("https://db.onlinewebfonts.com/t/73ce3e810d666d1af9a014441b524c0c.eot");
+  src: url("https://db.onlinewebfonts.com/t/73ce3e810d666d1af9a014441b524c0c.eot?#iefix")format("embedded-opentype"),
+  url("https://db.onlinewebfonts.com/t/73ce3e810d666d1af9a014441b524c0c.woff2")format("woff2"),
+  url("https://db.onlinewebfonts.com/t/73ce3e810d666d1af9a014441b524c0c.woff")format("woff"),
+  url("https://db.onlinewebfonts.com/t/73ce3e810d666d1af9a014441b524c0c.ttf")format("truetype"),
+  url("https://db.onlinewebfonts.com/t/73ce3e810d666d1af9a014441b524c0c.svg#Proto Grotesk Web")format("svg");
 }
 
 .App {
   text-align: center;
-  font-family: "Suisse Intl Regular";
+  font-family: "Roboto", sans-serif;
 }
 
 .App-logo {

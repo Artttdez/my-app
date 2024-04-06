@@ -1,0 +1,71 @@
+@import './Form.css';
+@import './Button.css';
+@import "./theme.css";
+
+.react-aria-DateField {
+  color: var(--text-color);
+  font-family: "Roboto", sans-serif;
+}
+
+.react-aria-DateInput {
+  display: flex;
+  color: black;
+  font-family: "Roboto", sans-serif;
+  padding: 10px 10px !important;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: white;
+  white-space: nowrap;
+  width: calc(100% - 8px);
+  forced-color-adjust: none;
+
+  &[data-focus-within] {
+    outline: 2px solid var(--focus-ring-color);
+    outline-offset: -1px;
+  }
+}
+
+.react-aria-DateSegment {
+  padding: 0 2px;
+  text-align: end;
+  color: black;
+  font-family: "Roboto", sans-serif;
+  
+
+  &[data-type=literal] {
+    padding: 0;
+  }
+
+  &[data-placeholder] {
+    font-family: "Roboto", sans-serif;
+    color: var(--text-color-placeholder);
+  }
+
+  &:focus {
+    color: var(--highlight-foreground);
+    background: var(--highlight-background);
+    outline: none;
+    border-radius: 4px;
+    caret-color: transparent;
+  }
+
+  &[data-invalid] {
+    color: var(--invalid-color);
+
+    &:focus {
+      background: var(--highlight-background-invalid);
+      color: var(--highlight-foreground);
+    }
+  }
+}
+
+.react-aria-DateField {
+  .react-aria-FieldError {
+    font-size: 12px;
+    color: var(--invalid-color);
+  }
+
+  [slot=description] {
+    font-size: 12px;
+  }
+}

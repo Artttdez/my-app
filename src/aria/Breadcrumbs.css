@@ -1,13 +1,4 @@
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
+@import "./theme.css";
 
 .react-aria-Breadcrumbs {
   display: flex;
@@ -17,6 +8,7 @@ code {
   padding: 0;
   font-size: 18px;
   color: var(--text-color);
+}
 
   .react-aria-Breadcrumb:not(:last-child)::after {
     content: '›';
@@ -59,4 +51,4 @@ code {
       }
     }
   }
-}
+
