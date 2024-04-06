@@ -57,3 +57,103 @@
     font-size: 1rem;
     background-color: none !important;
 }
+
+.TinderCardContainer {
+    position: relative;
+    width: 80vw;
+    max-width: 300px;
+    height: 420px;
+    margin: 24px auto 24px;
+  }
+  
+  .TinderCard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    width: 80vw;
+    max-width: 300px;
+    height: 420px;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .TinderCard-Top {
+    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.30);
+  }
+
+  .TinderContent {
+    text-align: left;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .TinderImage {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .TinderTitle {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .TinderParams {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 8px;
+    row-gap: 4px;
+    align-items: center;
+  }
+
+  .TinderParams {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .TinderBackground {
+    position: absolute;
+    left: -58px;
+    top: 540px;
+    width: 100vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .TinderBackground-Left {
+    background-color: #a0a0a0;
+    border-top-right-radius: 100%;
+    border-bottom-right-radius: 100%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+  }
+
+  .TinderBackground-Right {
+    background-color: #D6F3E9;
+    border-top-left-radius: 100%;
+    border-bottom-left-radius: 100%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .TinderBackground-Placeholder {
+    position: absolute;
+    top: 196px;
+    width: 80vw;
+    max-width: 300px;
+    font-size: 28px;
+    line-height: 32px;
+    color:#a0a0a0;
+  }

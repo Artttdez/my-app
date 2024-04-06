@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TagGroup, Label, TagList, Tag, CheckboxGroup, Checkbox, Group, Button, Calendar, CalendarCell, CalendarGrid, DateInput, DatePicker, DateSegment, Dialog, Heading, Popover } from 'react-aria-components';
+import LinesEllipsis from 'react-lines-ellipsis';
+
+import TinderCard from 'react-tinder-card';
 
 import './RouteCreate.css';
 
-const CustomRoute = () => {
+const CustomRoute = ({ onCustomCreate } : { onCustomCreate: () => void }) => {
     return (
         <div className="CustomRoute">
             <Label className='Label Label-Big'>
@@ -139,7 +142,7 @@ const CustomRoute = () => {
     Достаточно хорошо: 6+
   </Checkbox>
 </CheckboxGroup>
-<Button>
+<Button onPress={onCustomCreate}>
     Построить маршрут
 </Button>
         </div>
@@ -147,10 +150,124 @@ const CustomRoute = () => {
     )
 }
 
-export const RouteCreate = () => {
+const db = [
+    {
+        title: "ВДНХ",
+        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
+        area: "Химкинский",
+        metroStation: "Коковская",
+        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
+    },
+    {
+        title: "ВДНХ",
+        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
+        area: "Химкинский",
+        metroStation: "Коковская",
+        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
+    },
+    {
+        title: "ВДНХ",
+        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
+        area: "Химкинский",
+        metroStation: "Коковская",
+        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
+    },
+    {
+        title: "ВДНХ",
+        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
+        area: "Химкинский",
+        metroStation: "Коковская",
+        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
+    },
+    {
+        title: "ВДНХ",
+        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
+        area: "Химкинский",
+        metroStation: "Коковская",
+        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
+    }
+  ]
+
+export const RouteTinder = () => {
+    const characters = db;
+    const kok = useRef(null);
+    const [lastDirection, setLastDirection] = useState<string>();
+    const [cardTop, setCardTop] = useState(characters.length - 1);
+  
+    const swiped = (direction: string, nameToDelete: string) => {
+        setCardTop(id => id - 1);
+      setLastDirection(direction)
+    }
+  
+      return (
+        <div className='TinderCardContainer'>
+        <div className='TinderBackground'>
+        <div className='TinderBackground-Left'>
+        <svg width="20" height="25" viewBox="0 0 20 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.5312 5.46875L5.46875 19.5312M19.5312 19.5312L5.46875 5.46875" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        </div>
+        <Button>
+            Завершить выбор
+        </Button>
+        <div className='TinderBackground-Right'>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21.5 13L14.1625 20L10.5 16.5M28 16C28 22.6274 22.6274 28 16 28C9.37258 28 4 22.6274 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" stroke="#039855" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        </div>
+        </div>
+        <div className='TinderBackground-Placeholder'>
+            На этом - всё, пошли&nbsp;гулять&nbsp;😊 
+        </div>
+        {characters.map((character, id) =>
+          <TinderCard ref={kok} className='swipe' key={character.title} onSwipe={(dir) => swiped(dir, character.title)}>
+            <div className={`TinderCard ${id === cardTop ? "TinderCard-Top" : undefined}`}>
+                <div className='TinderImage' style={{ background: 'url(' + character.url + ')' + ' no-repeat center center', width: "100%", height: "200px" }}  />
+            <div className='TinderContent'>
+              <div className='TinderTitle'>{character.title}</div>
+            <div className='TinderParams'>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.4197 2.60309H15.0197C15.0197 2.27172 14.751 2.00309 14.4197 2.00309V2.60309ZM14.4197 4.84517V5.44517C14.751 5.44517 15.0197 5.17654 15.0197 4.84517H14.4197ZM1.60133 2.60309V2.00309C1.26996 2.00309 1.00133 2.27172 1.00133 2.60309H1.60133ZM1.60133 4.84517H1.00133C1.00133 5.17654 1.26996 5.44517 1.60133 5.44517V4.84517ZM13.8197 2.60309V4.84517H15.0197V2.60309H13.8197ZM14.4197 4.24517H12.5311V5.44517H14.4197V4.24517ZM10.9356 8.01125C10.9441 7.94565 10.997 7.78353 11.1468 7.64129C11.2818 7.51304 11.5288 7.36934 11.9858 7.36934V6.16934C11.2471 6.16934 10.6965 6.41399 10.3204 6.77117C9.95904 7.11437 9.78722 7.53478 9.74553 7.85752L10.9356 8.01125ZM8.01051 3.20309H14.4197V2.00309H8.01051V3.20309ZM12.5311 4.24517H8.01051V5.44517H12.5311V4.24517ZM10.3406 7.33439H9.25413V8.53439H10.3406V7.33439ZM9.25413 7.33439H8.0105V8.53439H9.25413V7.33439ZM9.85413 13.0073V7.93439H8.65413V13.0073H9.85413ZM15.0197 7.92271V7.41065H13.8197V7.92271H15.0197ZM12.1056 13.0073V9.76784H10.9056V13.0073H12.1056ZM12.1056 9.76784V9.70886H10.9056V9.76784H12.1056ZM15.0197 7.41065C15.0197 6.03929 14.0924 4.60716 12.6728 4.26215L12.3894 5.4282C13.1865 5.62193 13.8197 6.50084 13.8197 7.41065H15.0197ZM9.74059 7.93439C9.74059 8.98615 10.3611 9.89036 11.2491 10.3103L11.7621 9.22542C11.2749 8.99502 10.9406 8.50173 10.9406 7.93439H9.74059ZM11.2491 10.3103C11.5912 10.472 11.9731 10.5623 12.3743 10.5623V9.36226C12.1546 9.36226 11.9474 9.31305 11.7621 9.22542L11.2491 10.3103ZM12.3743 10.5623C13.8298 10.5623 15.0197 9.38273 15.0197 7.92271H13.8197C13.8197 8.71552 13.1715 9.36226 12.3743 9.36226V10.5623ZM1.00133 2.60309V4.84517H2.20133V2.60309H1.00133ZM1.60133 5.44517H3.48987V4.24517H1.60133V5.44517ZM6.27545 7.85752C6.23376 7.53478 6.06194 7.11437 5.70057 6.77117C5.32449 6.41399 4.77392 6.16934 4.03515 6.16934V7.36934C4.49218 7.36934 4.73915 7.51304 4.87419 7.64129C5.02396 7.78353 5.07686 7.94565 5.08533 8.01125L6.27545 7.85752ZM8.01051 2.00309H1.60133V3.20309H8.01051V2.00309ZM3.48987 5.44517H8.01051V4.24517H3.48987V5.44517ZM5.68039 8.53439H6.76685V7.33439H5.68039V8.53439ZM6.76685 8.53439H8.0105V7.33439H6.76685V8.53439ZM7.36685 13.0073V7.93439H6.16685V13.0073H7.36685ZM2.20132 7.92271V7.41065H1.00132V7.92271H2.20132ZM5.11535 13.0073V9.76784H3.91535V13.0073H5.11535ZM5.11535 9.76784V9.70886H3.91535V9.76784H5.11535ZM2.20132 7.41065C2.20132 6.50085 2.83448 5.62193 3.63158 5.4282L3.34817 4.26215C1.92863 4.60716 1.00132 6.03928 1.00132 7.41065H2.20132ZM5.08039 7.93439C5.08039 8.50173 4.74612 8.99503 4.25886 9.22543L4.77183 10.3103C5.65983 9.89036 6.28039 8.98615 6.28039 7.93439H5.08039ZM4.25886 9.22543C4.07356 9.31305 3.86641 9.36226 3.64671 9.36226V10.5623C4.04782 10.5623 4.42982 10.472 4.77183 10.3103L4.25886 9.22543ZM3.64671 9.36226C2.84944 9.36226 2.20132 8.71552 2.20132 7.92271H1.00132C1.00132 9.38273 2.19117 10.5623 3.64671 10.5623V9.36226Z" fill="#1D1D1D"/>
+            </svg>
+              <TagGroup selectionMode='none' onSelectionChange={() => {}}>
+                    <TagList>
+                        <Tag>Музей</Tag>
+                    </TagList>
+            </TagGroup>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.33281 8.63529C9.3585 8.63529 10.19 7.80381 10.19 6.77812C10.19 5.75244 9.3585 4.92096 8.33281 4.92096C7.30713 4.92096 6.47565 5.75244 6.47565 6.77812C6.47565 7.80381 7.30713 8.63529 8.33281 8.63529Z" stroke="#1D1D1D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.33281 14.2068C10.809 11.7306 13.2853 9.51328 13.2853 6.77812C13.2853 4.04297 11.068 1.82568 8.33281 1.82568C5.59765 1.82568 3.38037 4.04297 3.38037 6.77812C3.38037 9.51328 5.85659 11.7306 8.33281 14.2068Z" stroke="#1D1D1D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span className='TinderParams'>
+                {character.area}
+            </span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.60544 13.4091L4.41907 2.60352H4.74017L7.73644 12.4028H8.37864L11.1622 2.60352H11.4833L13.5229 13.4013M1 13.4092L4.13056 13.4092M11.8932 13.4013L15 13.4013" stroke="#1D1D1D" stroke-width="1.2"/>
+            </svg>
+            <span className='TinderParams'>
+                {character.metroStation}
+            </span>
+            </div>
+              <LinesEllipsis
+                className='TinderCardDescription'
+                text={character.description}
+                maxLine='4'
+                ellipsis='...'
+                trimRight
+                basedOn='letters'
+                />
+            </div>
+            </div>
+          </TinderCard>
+        )}
+      </div>
+      )
+}
+
+export const RouteCreateToggle = () => {
     const [isCustomRoute, setIsCustomRoute] = useState(true);
     return (
-        <div className='RouteCreate'>
+        
         <div className='RouteCreate-Inside'>
             <div>
             <Label className='Label Label-Big'>
@@ -188,8 +305,21 @@ export const RouteCreate = () => {
 </DatePicker>
             </div>
 </div>
-<CustomRoute/>
-        </div>
-        
+    );
+}
+
+export const RouteCreate = () => {
+    const [isTinder, setIsTinder] = useState(false);
+    return (
+    <>
+    {
+    isTinder ? 
+    <RouteTinder/> :
+    <div className='RouteCreate'>
+        <RouteCreateToggle/>
+        <CustomRoute onCustomCreate={() => { setIsTinder(true) }}/>
+    </div>
+    }
+    </>
     );
 };
