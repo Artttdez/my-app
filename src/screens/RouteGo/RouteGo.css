@@ -1,0 +1,220 @@
+[data-rsbs-backdrop] {
+    background: transparent !important;
+    visibility: hidden;
+    opacity: 0;
+}
+
+[data-rsbs-overlay] {
+    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.30);
+}
+
+.react-aria-Tabs {
+    display: flex;
+    color: var(--text-color);
+  
+    &[data-orientation=horizontal] {
+      flex-direction: column;
+    }
+  }
+  
+  .react-aria-TabList {
+    display: flex;
+  
+    &[data-orientation=horizontal] {
+      .react-aria-Tab {
+        border-bottom: 3px solid var(--border-color);
+      }
+    }
+  }
+  
+  .react-aria-Tab {
+    padding: 10px;
+    cursor: default;
+    outline: none;
+    position: relative;
+    color: var(--text-color-base);
+    transition: color 200ms;
+    --border-color: transparent;
+    forced-color-adjust: none;
+  
+    &[data-hovered],
+    &[data-focused] {
+      color: var(--text-color-hover);
+    }
+  
+    &[data-selected] {
+      --border-color: #FFCF08;
+      color: black;
+    }
+  
+    &[data-disabled] {
+      color: var(--text-color-disabled);
+      &[data-selected] {
+        --border-color: var(--text-color-disabled);
+      }
+    }
+  
+    &[data-focus-visible]:after {
+      content: '';
+      position: absolute;
+      inset: 4px;
+      border-radius: 4px;
+      border: 2px solid var(--focus-ring-color);
+    }
+  }
+  
+  .react-aria-TabPanel {
+    margin-top: 4px;
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+  
+    &[data-focus-visible] {
+      outline: 2px solid var(--focus-ring-color);
+    }
+  }
+  
+  .react-aria-Tabs {
+    &[data-orientation=vertical] {
+      flex-direction: row;
+    }
+  }
+  
+  .react-aria-TabList {
+    &[data-orientation=vertical] {
+      flex-direction: column;
+      border-inline-end: 1px solid gray;
+  
+      .react-aria-Tab {
+        border-inline-end: 3px solid var(--border-color, transparent);
+      }
+    }
+  }
+  
+  .react-aria-Tab {
+    &[data-disabled] {
+      color: var(--text-color-disabled);
+      &[data-selected] {
+        --border-color: var(--border-color-disabled);
+      }
+    }
+  }
+  
+  .react-aria-Tab[href] {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .react-aria-Breadcrumbs
+.react-aria-Link
+&[data-current] {
+    color: black !important;
+    font-weight: bold;
+}
+
+.RouteTabs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.RouteTabs-Breadcrumbs {
+    margin-left: 8px;
+}
+
+.SheetRoutes {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.SheetRoute {
+    background-color: #F5F5F5;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.SheetRoute-Active {
+    background: #FFCF08;
+}
+
+.RouteTabs-Title {
+    font-family: "Proto Grotesk Web";
+    text-align: left;
+    margin: 0;
+    margin-left: 8px;
+    font-size: 28px;
+}
+
+@keyframes spin{
+    0%{
+        transform: rotateY(0deg);
+    }
+    100%{
+        transform: rotateY(360deg);
+    }
+}
+
+.coin{
+	background: #FFDE00;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	position: absolute;
+    top: -7.5px;
+    right: -1.5px;
+    transform-style: preserve-3d;
+	animation: spin 2s linear infinite;
+}
+	
+	
+.coin:before{
+		background-color: #FF9900;
+		position: absolute;
+		border-radius: 50%;
+		content: '';
+		height: 15px;
+		width: 15px;
+		transform: translateZ(-1.5px);
+	}
+	
+.coin:after{
+		background-color: #FF9900;
+		content: '';
+		left: 6.375px;
+		position: absolute;
+		height: 15px;
+		width: 1.125px;
+		z-index: -10;
+		transform: rotateY(-90deg);
+		transform-origin: 100% 50%;
+	}
+
+
+.tails{
+	background-color: #FF9900;
+	position: absolute;
+	border-radius: 50%;
+	content: '';
+	height: 15px;
+	width: 15px;
+	transform: translateZ(-0.0075px);
+	border: 1px solid #FF9900;
+}
+
+.heads{
+	background-color: #FFDE00;
+	position: absolute;
+	border-radius: 50%;
+	content: '';
+	height: 15px;
+	width: 15px;
+	transform: translateZ(-1.1325px);
+	border: 1px solid #FF9900;
+}

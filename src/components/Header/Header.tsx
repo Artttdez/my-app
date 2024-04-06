@@ -1,8 +1,16 @@
 import React from 'react';
+import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
+import { useMutation } from 'react-query';
+import { BACK_URL } from '../../contants';
 
 import './Header.css';
 
 export const Header = () => {
+    // const { mutate: onLogin } = useMutation(async () => { console.log(22); await fetch(BACK_URL + '/callback-oauth-yandex')});
+
+    const onLogin = () => {
+        window.location.replace('https://russpass-hack.onrender.com/login-yandex');
+    }
     return (
         <div className='Header'>
             <div className='Header-Inside'>
@@ -27,17 +35,34 @@ export const Header = () => {
             </svg>
             </div >
             <div className='RightMenu'>
+            <Button className="MenuButton">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M17.9943 12.2798C16.3282 10.332 13.5498 9.80804 11.4623 11.5917C9.37472 13.3753 9.08083 16.3575 10.7202 18.467C12.0832 20.2209 16.2082 23.9201 17.5601 25.1174C17.7114 25.2513 17.787 25.3183 17.8752 25.3446C17.9522 25.3676 18.0364 25.3676 18.1134 25.3446C18.2016 25.3183 18.2773 25.2513 18.4285 25.1174C19.7805 23.9201 23.9054 20.2209 25.2684 18.467C26.9078 16.3575 26.6498 13.3566 24.5264 11.5917C22.4029 9.8268 19.6604 10.332 17.9943 12.2798Z" stroke="#1D1D1D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+            </Button>
+            <Button className="MenuButton" onPress={() => { onLogin() }}>
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12.1667 25.4995C12.1667 25.0679 12.2487 24.6495 12.3696 24.25C13.0226 22.0935 15.2636 20.5 18.0045 20.5C20.7455 20.5 22.9886 22.0935 23.6416 24.25C23.7626 24.6495 23.8334 25.0979 23.8334 25.5046M21.7546 14.25C21.7546 16.3211 20.0757 18 18.0046 18C15.9336 18 14.2547 16.3211 14.2547 14.25C14.2547 12.1789 15.9336 10.5 18.0046 10.5C20.0757 10.5 21.7546 12.1789 21.7546 14.25Z" stroke="#1D1D1D" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/>
             </svg>
+            </Button>
+            <MenuTrigger>
+            <Button className="MenuButton">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 18H26M10 13H26M10 23H26" stroke="black" stroke-width="2" stroke-linejoin="round"/>
             </svg>
+            </Button>
+                <Popover>
+    <Menu >
+      <MenuItem id="open">Open</MenuItem>
+      <MenuItem id="rename">Rename…</MenuItem>
+      <MenuItem id="duplicate">Duplicate</MenuItem>
+      <MenuItem id="share">Share…</MenuItem>
+      <MenuItem id="delete">Delete…</MenuItem>
+    </Menu>
+  </Popover>
+</MenuTrigger>
             </div>
             </div>
         </div>
     )
-}
+};

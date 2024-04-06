@@ -24,6 +24,16 @@ align-items: center;
 
 .RightMenu {
     display: flex;
-    gap: 8px;
+    gap: 2px;
 }
 
+.MenuButton {
+    border: none !important;
+    font-weight: 600;
+    font-size: 1rem;
+    background-color: transparent !important;
+}
+
+.react-aria-MenuItem {
+    padding: 4px;
+}
