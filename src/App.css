@@ -1,5 +1,16 @@
+@font-face {
+  font-family: "Suisse Intl Regular";
+  src: url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.eot");
+  src: url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.eot?#iefix")format("embedded-opentype"),
+  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.woff2")format("woff2"),
+  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.woff")format("woff"),
+  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.ttf")format("truetype"),
+  url("https://db.onlinewebfonts.com/t/eb270b13b84d5a43462737e3fb0a268d.svg#Suisse Intl Regular")format("svg");
+}
+
 .App {
   text-align: center;
+  font-family: "Suisse Intl Regular";
 }
 
 .App-logo {
