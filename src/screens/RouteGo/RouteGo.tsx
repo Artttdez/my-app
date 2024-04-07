@@ -3,15 +3,116 @@ import { YMaps, Map, GeolocationControl, ZoomControl } from '@pbe/react-yandex-m
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import { RefHandles } from 'react-spring-bottom-sheet/dist/types';
 import { YMapsApi } from '@pbe/react-yandex-maps/typings/util/typing';
-import { Breadcrumb, Breadcrumbs, Link, Tab, TabList, TabPanel, Tabs } from 'react-aria-components';
+import { Breadcrumb, Breadcrumbs, Button, Link, Tab, TabList, TabPanel, Tabs } from 'react-aria-components';
 import { QrReader } from 'react-qr-reader';
 
 import "../../aria/Breadcrumbs.css";
+import "../../aria/Button.css";
 
 import 'react-spring-bottom-sheet/dist/style.css'
 import './RouteGo.css';
+import { useQuery } from 'react-query';
+import { BACK_URL } from '../../contants';
+import { useParams } from 'react-router-dom';
 
 export const RouteGo = () => {
+  const { id } = useParams();
+
+  // const { data } = useQuery<any>(
+  //   'pipsusData',
+  //   async () => {
+  //       let cookie = "";
+  //       const value = `; ${document.cookie}`;
+  //       const parts = value.split(`; AUTH_SESSION=`);
+  //       if (parts.length === 2) {
+  //           cookie = String(parts?.pop()?.split(';').shift());
+  //       };
+   
+  //     return await fetch(
+  //       BACK_URL + 'api/routes/' + id + '/',
+  //       {
+  //           headers: {
+  //               "Access-Control-Allow-Origin": "*",
+  //               "Content-Type": "application/json",
+  //               "X-Auth-Session": cookie,
+  //           },
+  //           credentials: 'include',
+  //         }
+  //     ).then(res => res.json());
+  //   },
+  //   {
+  //       useErrorBoundary: true,
+  //   }
+  // );
+
+  const data = {
+    "id": "3c8050f7-43ea-4fe5-941c-188e942cd7ce",
+    "owner": {
+        "id": "740f422b-e8ff-45dc-9ac3-5ee0a296e6a0",
+        "firstName": "Даниил",
+        "realName": "Даниил Орешников",
+        "email": "d0reshnikov@yandex.ru",
+        "profilePhotoUrl": "https://avatars.yandex.net/get-yapic/30061/SEtb2NOMvVnQy8sg80S4wrNoz5g-1/islands-retina-50",
+        "createdAt": "2024-04-06T20:35:20.363369Z",
+        "birthDate": null,
+        "bonusQuantityNow": 0,
+        "bonusQuantityTotal": 0
+    },
+    "title": "Исторический центр Москвы",
+    "city": "Москва",
+    "description": "Прогулка по историческому центру Москвы с посещением главных достопримечательностей города.",
+    "audioGuideUrl": null,
+    "rating": 4.5,
+    "places": [
+        [
+            {
+                "id": "b02a7b52-b175-4a75-8fb7-be1ac807c7b1",
+                "isService": false,
+                "title": "Красная площадь",
+                "description": "Историческая площадь в центре Москвы, знаменита своими парадами и архитектурными достопримечательностями.",
+                "area": "center",
+                "metroStation": "Охотный Ряд",
+                "rating": 4.9,
+                "openHoursFrom": "2024-01-01T00:00:00Z",
+                "openHoursTo": "2024-01-01T23:59:59Z",
+                "categories": [],
+                "verificationCode": "b02a7b52-b175-4a75-8fb7-be1ac807c7b1",
+                "s3Album": "https://drive.google.com/thumbnail?id=1_E8bzDeKpcsq2uC22LcuPGjb2SNNL0HW",
+                "latitude": 55.753913,
+                "longitude": 37.620836,
+                "validFrom": null,
+                "validTo": null,
+                "price": null
+            },
+            {
+              "id": "88b9a97c-74ec-487d-8df1-7542009f6e78",
+              "isService": true,
+              "title": "Баррикадная",
+              "description": "service_metro",
+              "area": "",
+              "metroStation": "Баррикадная",
+              "rating": null,
+              "openHoursFrom": null,
+              "openHoursTo": null,
+              "categories": [],
+              "verificationCode": null,
+              "s3Album": null,
+              "latitude": 55.76027,
+              "longitude": 37.58111,
+              "validFrom": null,
+              "validTo": null,
+              "price": null
+          }
+        ]
+    ],
+    "createdAt": "2024-04-01T10:00:00Z",
+    "bonusForRoute": 40,
+    "isVisited": false,
+    "lastVisitedPlace": -1,
+    "gift": null
+  };
+
+  const [routeStatus, setRouteStatus] = useState<'start' | 'in_progress' | 'paused' | 'finished'>('start');
 
   return (
     <div className='RouteTabs'>
@@ -30,10 +131,10 @@ export const RouteGo = () => {
         <Tab id="Book">Билеты и брони</Tab>
       </TabList>
         <TabPanel id="Plan">
-          Arma virumque cano, Troiae qui primus ab oris.
+          <RoutePlan route={data} routeStatus={routeStatus} setRouteStatus={value => { setRouteStatus(value)}}/>
         </TabPanel>
       <TabPanel id="OnTrip">
-      <RouteOnTrip/>
+      <RouteOnTrip route={data} routeStatus={routeStatus} setRouteStatus={value => { setRouteStatus(value)}}/>
       </TabPanel>
       <TabPanel id="Book">
           
@@ -43,29 +144,9 @@ export const RouteGo = () => {
   );
 }
 
-const RouteQR = () => {
-  const [data, setData] = useState('No result');
-
-  return (
-    <>
-    <QrReader
-                onResult={(result, error) => {
-                    if (!!result) {
-                        setData(result?.getText());
-                    }
-
-                    if (!!error) {
-                        console.info(error);
-                    }
-                } }
-                className='KOK' constraints={{}}/>
-      <p>{data}</p>
-    </>
-  );
-}
-export const RouteOnTrip = () => {
-  const [open, setOpen] = useState(true);
+export const RoutePlan = ({ route, routeStatus, setRouteStatus }: { route: any, routeStatus: 'start' | 'in_progress' | 'paused' | 'finished', setRouteStatus(value: 'start' | 'in_progress' | 'paused' | 'finished'): void }) => {
   const sheetRef = useRef<RefHandles>(null);
+
 
     const [api, setApi] = useState<YMapsApi>();
     const [points, setPoints] = useState<(number[] | string)[]>();
@@ -74,7 +155,7 @@ export const RouteOnTrip = () => {
 
     const map = useRef<ymaps.Map | undefined>(undefined);
     const mapState = {
-      center: [59.949002, 30.327143],
+      center: [55.755805, 37.617549],
       zoom: 12
     };
 
@@ -82,6 +163,24 @@ export const RouteOnTrip = () => {
         setApi(ymaps);
       }, []);
 
+    const getLetter = (number: number) => {
+      // Define a mapping of numbers to letters
+  const letterMap: { [key: string]: string } = {
+    1: 'A',
+    2: 'B',
+    3: 'C',
+    4: 'D',
+    5: 'E',
+    6: 'F',
+    7: 'G',
+    8: 'H',
+    9: 'I',
+    // Add more mappings as needed
+  };
+
+  // Return the corresponding letter for the input number
+  return letterMap[number + 1];
+    };
 
 
     useEffect(() => {
@@ -107,7 +206,7 @@ export const RouteOnTrip = () => {
               }
             );
 
-          multiRoute.events.once('requestsuccess', function () {
+          multiRoute.events.once('update', function () {
             // Set first non-blocked route as active and open it's balloon.
             var routes = multiRoute.getRoutes();
             for (var i = 0, l = routes.getLength(); i < l; i++) {
@@ -122,17 +221,21 @@ export const RouteOnTrip = () => {
             map?.current?.geoObjects.add(multiRoute);
           }
       })
-      console.log('triggered');
         }
       }, [map, points, api, routeType, setRoutes]);
 
 
     useEffect(() => {
-       setPoints([[59.956435, 30.308726], [59.972370, 30.301980]]);
-    }, []);
+      if (route.places) {
+       setPoints(route.places[0].map((item: any) => ([item.latitude, item.longitude])));
+      }
+    }, [route]);
+
+    const [data, setData] = useState('Отсканируйте QR-код');
+    const [result, setResult] = useState<'green' | 'red' | undefined>();
 
     return (
-        <div>
+        <div style={{ position: "relative" }}>
             <YMaps query={{ apikey: '1d2d4e37-8ff6-4940-8ee3-6ba095c9e686', lang: 'ru_RU' }} >
               <Map
                 modules={["multiRouter.MultiRoute"]}
@@ -146,7 +249,16 @@ export const RouteOnTrip = () => {
                 <ZoomControl />
               </Map>
             </YMaps>
-            <BottomSheet open={open} ref={sheetRef} footer={<div>fdfvdfvdf</div>}
+            <BottomSheet open={true} ref={sheetRef} footer={<div style={{ display: "flex", justifyContent: "center"}}>{
+            routeStatus === 'start' &&
+              <Button onPress={() => setRouteStatus('in_progress')}>
+              Начать маршрут
+            </Button>
+            } 
+            {
+                (routeStatus === 'finished') && 'Маршрут завершён'
+            } 
+            </div>}
             snapPoints={({ maxHeight }) => [
                 maxHeight - maxHeight / 5,
                 maxHeight / 4,
@@ -192,9 +304,174 @@ export const RouteOnTrip = () => {
               <div className="SheetRoutes-Distance">{routes?.["masstransit"]}</div>
               </div>
             </div>
-            
-            
+            <div className='Marsh'>
+              {route.places[0].map((item: any, id: number) => (
+                <div className='MarshItem'>
+                  <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "100%", background: "#FFCF08"}}>
+                  {getLetter(id)}
+                  </div>
+                 <div className='MarshImage' style={{ background: 'url(' + item.s3Album + ')' + ' no-repeat cover', width: "48px", height: "48px", borderRadius: "8px" }}  >
+                 <img src={item.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover",  borderRadius: "8px" }} />
+                 </div>
+             <div className='MarshContent'>
+               <div className='MarshTitle'>{item.title}</div>
+               <div className='MarshArea'>{item.metroStation}</div>
+             </div>
+             </div>
+              ))}
+            </div>
             </BottomSheet>
+        </div>
+    );
+}
+
+export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any, routeStatus: 'start' | 'in_progress' | 'paused' | 'finished', setRouteStatus(value: 'start' | 'in_progress' | 'paused' | 'finished'): void }) => {
+  const [open, setOpen] = useState(true);
+
+  const [openQR, setOpenQR] = useState(false);
+
+  const sheetRef = useRef<RefHandles>(null);
+
+  const sheetQRRef = useRef<RefHandles>(null);
+
+    const [api, setApi] = useState<YMapsApi>();
+    const [points, setPoints] = useState<(number[] | string)[]>();
+    const [routes, setRoutes] = useState<{ pedestrian: string, masstransit: string, driving: string} | null>(null);
+    const routeType = 'pedestrian';
+
+    const map = useRef<ymaps.Map | undefined>(undefined);
+    const mapState = {
+      center: [55.755805, 37.617549],
+      zoom: 12
+    };
+
+    const addRoute = useCallback((ymaps: YMapsApi) => {
+        setApi(ymaps);
+      }, []);
+
+
+
+    useEffect(() => {
+        if (map?.current && points && api) {
+          const ROUTE_MAP = ['pedestrian', 'masstransit', 'auto'];
+          ROUTE_MAP.forEach(type => {
+            const multiRoute: any = new api.multiRouter.MultiRoute(
+              {
+                referencePoints: points,
+                params: {
+                  routingMode: type as 'pedestrian' | 'masstransit' | 'auto',
+                }
+              },
+              {
+                 // Внешний вид линии активного маршрута.
+                routeActiveStrokeWidth: 4,
+                routeActiveStrokeStyle: 'solid',
+                routeActiveStrokeColor: "#002233",
+                // Внешний вид линий альтернативных маршрутов.
+                routeStrokeStyle: 'dot',
+                routeStrokeWidth: 3,
+                boundsAutoApply: true
+              }
+            );
+          
+          if (routeType === type) {
+            map?.current?.geoObjects.removeAll();
+            map?.current?.geoObjects.add(multiRoute);
+          }
+      })
+        }
+      }, [map, points, api, routeType, setRoutes]);
+
+
+    useEffect(() => {
+      if (route.places) {
+       setPoints(route.places[0].map((item: any) => ([item.latitude, item.longitude])));
+      }
+    }, [route]);
+
+    const [data, setData] = useState('Отсканируйте QR-код');
+    const [result, setResult] = useState<'green' | 'red' | undefined>();
+
+    return (
+        <div style={{ position: "relative" }}>
+            <YMaps query={{ apikey: '1d2d4e37-8ff6-4940-8ee3-6ba095c9e686', lang: 'ru_RU' }} >
+              <Map
+                modules={["multiRouter.MultiRoute"]}
+                state={mapState}
+                instanceRef={map}
+                onLoad={addRoute}
+                width={"100%"}
+                height={800}
+              >
+                <GeolocationControl />
+                <ZoomControl />
+              </Map>
+            </YMaps>
+            <Button className="QRAction" onPress={() => { setOpenQR(true) }}>
+            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="System / Qr_Code">
+<path id="Vector" d="M19 20H20M16 20H14V17M17 17H20V14H19M14 14H16M4 16.9997C4 16.0679 4 15.6019 4.15224 15.2344C4.35523 14.7443 4.74432 14.3552 5.23438 14.1522C5.60192 14 6.06786 14 6.99974 14C7.93163 14 8.39808 14 8.76562 14.1522C9.25568 14.3552 9.64467 14.7443 9.84766 15.2344C9.9999 15.6019 9.9999 16.0681 9.9999 17C9.9999 17.9319 9.9999 18.3978 9.84766 18.7654C9.64467 19.2554 9.25568 19.6447 8.76562 19.8477C8.39808 19.9999 7.93162 19.9999 6.99974 19.9999C6.06786 19.9999 5.60192 19.9999 5.23438 19.8477C4.74432 19.6447 4.35523 19.2557 4.15224 18.7656C4 18.3981 4 17.9316 4 16.9997ZM14 6.99974C14 6.06786 14 5.60192 14.1522 5.23438C14.3552 4.74432 14.7443 4.35523 15.2344 4.15224C15.6019 4 16.0679 4 16.9997 4C17.9316 4 18.3981 4 18.7656 4.15224C19.2557 4.35523 19.6447 4.74432 19.8477 5.23438C19.9999 5.60192 19.9999 6.06812 19.9999 7C19.9999 7.93188 19.9999 8.39783 19.8477 8.76537C19.6447 9.25542 19.2557 9.64467 18.7656 9.84766C18.3981 9.9999 17.9316 9.9999 16.9997 9.9999C16.0679 9.9999 15.6019 9.9999 15.2344 9.84766C14.7443 9.64467 14.3552 9.25568 14.1522 8.76562C14 8.39808 14 7.93163 14 6.99974ZM4 6.99974C4 6.06786 4 5.60192 4.15224 5.23438C4.35523 4.74432 4.74432 4.35523 5.23438 4.15224C5.60192 4 6.06786 4 6.99974 4C7.93163 4 8.39808 4 8.76562 4.15224C9.25568 4.35523 9.64467 4.74432 9.84766 5.23438C9.9999 5.60192 9.9999 6.06812 9.9999 7C9.9999 7.93188 9.9999 8.39783 9.84766 8.76537C9.64467 9.25542 9.25568 9.64467 8.76562 9.84766C8.39808 9.9999 7.93162 9.9999 6.99974 9.9999C6.06786 9.9999 5.60192 9.9999 5.23438 9.84766C4.74432 9.64467 4.35523 9.25568 4.15224 8.76562C4 8.39808 4 7.93163 4 6.99974Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</svg>
+
+Я дошёл!
+            </Button>
+            {
+              !openQR ?
+            <BottomSheet open={true} ref={sheetRef} footer={<div style={{ display: "flex", justifyContent: "center"}}>{
+              (routeStatus === 'in_progress' || routeStatus === 'paused') &&
+                <Button onPress={() => setRouteStatus('finished')}>
+                Завершить маршрут
+              </Button>
+              }
+              {
+                (routeStatus === 'finished') && 'Маршрут завершён'
+              } 
+              </div>}
+            snapPoints={({ maxHeight }) => [
+                maxHeight - maxHeight / 5,
+                maxHeight / 4,
+                maxHeight / 10,
+              ]}
+            >
+            <div className='Marsh'>
+              {route.places[0].map((item: any) => (
+                <div className='MarshItem'>
+                 <div className='MarshImage' style={{ background: 'url(' + item.s3Album + ')' + ' no-repeat cover', width: "48px", height: "48px", borderRadius: "8px" }}  >
+                 <img src={item.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover",  borderRadius: "8px" }} />
+                 </div>
+             <div className='MarshContent'>
+               <div className='MarshTitle'>{item.title}</div>
+               <div className='MarshArea'>{item.metroStation}</div>
+             </div>
+             </div>
+              ))}
+            </div>  
+            
+            
+            </BottomSheet> :
+            <BottomSheet ref={sheetQRRef} open={openQR} snapPoints={({ maxHeight }) => [
+                maxHeight - maxHeight / 5,
+              ]}
+            >
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+              <QrReader
+                onResult={(result, error) => {
+                    if (!!result) {
+                        setData(result?.getText() === "kok" ? "Ура, вы получаете +10 баллов!" : "Неверный код, попробуйте еще раз");
+                        setResult(result?.getText() === "kok" ? "green" : "red")
+                    }
+
+                    if (!!error) {
+                        console.info(error);
+                    }
+                } }
+                className='QR' constraints={{}}/>
+              <p style={{ color: result }}>{data}</p>
+              <Button style={{ margin: "0 auto" }} onPress={() => { setOpenQR(false)}}>{result === 'green' ? "Ура, здорово!" : "Выйти"}</Button>
+              </div>
+            </BottomSheet>
+          }
         </div>
     );
 }

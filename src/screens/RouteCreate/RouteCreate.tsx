@@ -95,7 +95,7 @@ const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (result: 
             const area = data?.find((item: any) => item.title === areaState);
             onCustomCreate(result, { body: {
             date: dateState,
-            area_or_metro_station: area,
+            area_or_metro_station: area ?? null,
             required_categories: requiredCategoriesState,
             interesting_categories: categoriesState,
             min_rating: minRatingState,
@@ -313,7 +313,7 @@ const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (result: 
     setErrorMessage(undefined);
     onLoadTinder({ body: {
         date: dateState,
-        area_or_metro_station: area,
+        area_or_metro_station: area ?? null,
         required_categories: requiredCategoriesState,
         interesting_categories: categoriesState,
         min_rating: minRatingState,
@@ -577,7 +577,9 @@ export const RouteCreate = () => {
 
     return (
     <div className='RouteCreate'>
+        { !isTinder &&
     <RouteCreateToggle setDate={setDateState} isCustomRoute={isCustomRoute} setIsCustomRoute={value => { setIsCustomRoute(value)}}/>
+        }
     { isCustomRoute ?
     <>
     {
