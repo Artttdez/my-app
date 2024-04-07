@@ -207,3 +207,61 @@
         outline-offset: 2px;
       }
 }
+
+.RouteSmallCard {
+    position: relative;
+    background-color: #fff;
+    width: calc(100% - 16px);
+    margin: 0 8px 8px;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .RouteSmallCard-Top {
+    box-shadow: 0px 0px 60px 0px rgba(0,0,0,0.30);
+  }
+
+  .RouteSmallContent {
+    text-align: left;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .RouteSmallImage {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .RouteSmallTitle {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+  }
+
+  .RouteSmallParams {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 8px;
+    row-gap: 4px;
+    align-items: center;
+  }
+
+  .RouteSmallParams {
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .RouteSmallTags {
+    color: white;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    opacity: 0.9;
+  }
+
+  .RouteSmallTags .react-aria-Tag {
+    color: white;
+  }

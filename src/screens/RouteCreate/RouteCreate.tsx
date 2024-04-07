@@ -31,13 +31,14 @@ const CATEGORIES_REQUIRED = [
     { title: "С друзьями", value: "if_friends" },
 ]
 
-const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (data: any) => void, dateState?: string }) => {
+const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (result: any, data: any) => void, dateState?: string }) => {
 
     const [areaState, setAreaState] = useState<string | undefined>();
     const [requiredCategoriesState, setRequiredCategoriesState] = useState<string[] | undefined>([]);
     const [categoriesState, setCategoriesState] = useState<string[] | undefined>([]);
     const [minRatingState, setMinRatingState] = useState<number>(0);
     const [durationState, setDurationState] = useState<{ min: number, max: number } | undefined>();
+    const [nameState, setNameState] = useState<string | undefined>();
     const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
     const { data } = useQuery<any>(
@@ -90,7 +91,18 @@ const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (data: an
           }
       ).then(res => res.json());
     }, {
-        onSuccess: (data) => { onCustomCreate(data)},
+        onSuccess: (result) => { 
+            const area = data?.find((item: any) => item.title === areaState);
+            onCustomCreate(result, { body: {
+            date: dateState,
+            area_or_metro_station: area,
+            required_categories: requiredCategoriesState,
+            interesting_categories: categoriesState,
+            min_rating: minRatingState,
+            expected_duration_hours_min: durationState?.min,
+            expected_duration_hours_max: durationState?.max,
+            friends_ids: [],
+        }, name: nameState })},
         onError: () => { setErrorMessage("Заполните все поля!")},
     })
 
@@ -113,15 +125,23 @@ const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (data: an
             <Label className='Label Label-Big'>
                     Фильтры
                 </Label>
-                <div className="CustomRoute-Filters">
-
+                <div className="CustomRoute-Filters" >
+                    <div style={{ width: "calc(100% - 8px)" }}>
+                    <Label className='Label'>Название</Label>
+                    <Input className='Location' onChange={e => {
+                        setNameState(e.target.value);
+                    }} 
+                    value={nameState}
+                    />
+                    </div>
   <ComboBox>
   <Label className='Label'>Где пройдёт</Label>
   <Group style={{ width: "calc(100% - 8px)" }} className='LocationWrapper'>
     <Input className='Location' onChange={e => {
         onSearchLocation(e.target.value);
         setAreaState(e.target.value);
-    }} />
+    }} 
+    />
     <Button className='LocationButton'>▼</Button>
   </Group>
   <Popover>
@@ -300,7 +320,7 @@ const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (data: an
         expected_duration_hours_min: durationState?.min,
         expected_duration_hours_max: durationState?.max,
         friends_ids: [],
-    }});
+    }, name: nameState });
     }}>
     Построить маршрут
 </Button>
@@ -309,54 +329,51 @@ const CustomRoute = ({ onCustomCreate, dateState } : { onCustomCreate: (data: an
     )
 }
 
-const db = [
-    {
-        title: "ВДНХ",
-        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
-        area: "Химкинский",
-        metroStation: "Коковская",
-        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
-    },
-    {
-        title: "ВДНХ",
-        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
-        area: "Химкинский",
-        metroStation: "Коковская",
-        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
-    },
-    {
-        title: "ВДНХ",
-        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
-        area: "Химкинский",
-        metroStation: "Коковская",
-        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
-    },
-    {
-        title: "ВДНХ",
-        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
-        area: "Химкинский",
-        metroStation: "Коковская",
-        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
-    },
-    {
-        title: "ВДНХ",
-        description: "Музей, посвященный истории ВДНХ. Обязателен для посещения любителям советской эстетики и программы «Намедни». Находится в правом крыле арки главного входа. Внутри вас ждет большой архив с редкими фотографиями, чертежами павильонов и погружение в советскую историю.",
-        area: "Химкинский",
-        metroStation: "Коковская",
-        url: 'https://horosho-tam.ru/pics/b4/88/60cddcc2599aaf0e666a88b4.jpg'
-    }
-  ]
-
-export const RouteTinder = ({places}: {places: any[]}) => {
+export const RouteTinder = ({places, filters}: {places: any[], filters: any}) => {
     const characters = places;
     const kok = useRef(null);
-    const [lastDirection, setLastDirection] = useState<string>();
     const [cardTop, setCardTop] = useState(characters.length - 1);
+    const [blackList, setBlackList] = useState<any[]>([]);
+    const [whiteList, setWhiteList] = useState<any[]>([]);
+
+    console.log(filters);
   
-    const swiped = (direction: string, nameToDelete: string) => {
+    const swiped = (direction: 'left' | 'right' | 'up' | 'down', placeToSwipe: any) => {
         setCardTop(id => id - 1);
-      setLastDirection(direction)
+        if (direction === 'left') {
+            setBlackList([...blackList, placeToSwipe]);
+        }
+        if (direction === 'right') {
+            setWhiteList([...whiteList, placeToSwipe]);
+        }
     }
+
+    const { mutate: onFinalizeRoute } = useMutation(async (data: any) => {
+        let cookie = "";
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; AUTH_SESSION=`);
+        if (parts.length === 2) {
+            cookie = String(parts?.pop()?.split(';').shift());
+        };
+
+        console.log(data, 33);
+    
+      return await fetch(
+        BACK_URL + 'api/routes/',
+        {
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                "X-Auth-Session": cookie,
+            },
+            body: JSON.stringify(data),
+            credentials: 'include',
+          }
+      ).then(res => res.json());
+    }, {
+        onSuccess: (result) => { console.log(22); },
+    })
 
     useEffect(() => {
         setCardTop(places.length - 1);
@@ -370,7 +387,12 @@ export const RouteTinder = ({places}: {places: any[]}) => {
             <path d="M19.5312 5.46875L5.46875 19.5312M19.5312 19.5312L5.46875 5.46875" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
         </div>
-        <Button>
+        <Button onPress={() => {onFinalizeRoute({
+            places: whiteList ?? [],
+            name: filters.name,
+            places_blacklist: blackList ?? [],
+            filter: filters.body,
+        })}}>
             Завершить выбор
         </Button>
         <div className='TinderBackground-Right'>
@@ -383,9 +405,11 @@ export const RouteTinder = ({places}: {places: any[]}) => {
             На этом - всё, пошли&nbsp;гулять&nbsp;😊 
         </div>
         {characters.map((character, id) =>
-          <TinderCard ref={kok} className='swipe' key={character.title} onSwipe={(dir) => swiped(dir, character.title)}>
+          <TinderCard ref={kok} className='swipe' key={character.title} onSwipe={(dir) => swiped(dir, character)}>
             <div className={`TinderCard ${id === cardTop ? "TinderCard-Top" : undefined}`}>
-                <div className='TinderImage' style={{ background: 'url(' + character.url + ')' + ' no-repeat center center', width: "100%", height: "200px" }}  />
+            <div className='TinderImage' style={{ background: 'url(' + character.s3Album + ')' + ' no-repeat cover', width: "100%", height: "200px" }}  >
+                <img src={character.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
             <div className='TinderContent'>
               <div className='TinderTitle'>{character.title}</div>
             <div className='TinderParams'>
@@ -427,8 +451,7 @@ export const RouteTinder = ({places}: {places: any[]}) => {
       )
 }
 
-export const RouteCreateToggle = ({ setDate }: { setDate: any }) => {
-    const [isCustomRoute, setIsCustomRoute] = useState(true);
+export const RouteCreateToggle = ({ setDate, isCustomRoute, setIsCustomRoute }: { setDate: any, isCustomRoute: boolean, setIsCustomRoute(value: boolean): void }) => {
 
     return (
         
@@ -472,20 +495,98 @@ export const RouteCreateToggle = ({ setDate }: { setDate: any }) => {
     );
 }
 
+export const RoutesReady = () => {
+
+    const { data } = useQuery<any>(
+        'pipsiData',
+        async () => {
+            let cookie = "";
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; AUTH_SESSION=`);
+            if (parts.length === 2) {
+                cookie = String(parts?.pop()?.split(';').shift());
+            };
+       
+          return await fetch(
+            BACK_URL + 'api/routes/debug/all',
+            {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    "Content-Type": "application/json",
+                    "X-Auth-Session": cookie,
+                },
+                credentials: 'include',
+              }
+          ).then(res => res.json());
+        },
+        {
+            useErrorBoundary: true,
+        }
+      );
+
+    return (
+        <div style={{ paddingBottom: "8px" }}>
+            {data?.map((item: any) => (
+                <div className={'RouteSmallCard'}>
+                    <div className={'RouteSmallTags'}>
+                    <TagGroup selectionMode='none' onSelectionChange={() => {}}>
+                    <TagList>
+                        {
+                            item.rating &&
+                                <Tag style={{ backgroundColor: "green"}}>Рейтинг {item.rating}</Tag>
+                        }
+                        <Tag style={{ backgroundColor: "orange"}}>+{item.bonusForRoute} баллов</Tag>
+                    </TagList>
+                    </TagGroup>
+                    </div>
+                <div className='RouteSmallImage' style={{ width: "100%", height: "200px" }}  >
+                <img src={item.places[0][0].s3Album} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+            <div className='RouteSmallContent'>
+              <div className='RouteSmallTitle'>{item.title}</div>
+            <div className='RouteSmallParams'>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.33281 8.63529C9.3585 8.63529 10.19 7.80381 10.19 6.77812C10.19 5.75244 9.3585 4.92096 8.33281 4.92096C7.30713 4.92096 6.47565 5.75244 6.47565 6.77812C6.47565 7.80381 7.30713 8.63529 8.33281 8.63529Z" stroke="#1D1D1D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8.33281 14.2068C10.809 11.7306 13.2853 9.51328 13.2853 6.77812C13.2853 4.04297 11.068 1.82568 8.33281 1.82568C5.59765 1.82568 3.38037 4.04297 3.38037 6.77812C3.38037 9.51328 5.85659 11.7306 8.33281 14.2068Z" stroke="#1D1D1D" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span className='RouteSmallParams'>
+                {item.city}
+            </span>
+            </div>
+            <LinesEllipsis
+                className='TinderCardDescription'
+                text={item?.description}
+                maxLine='4'
+                ellipsis='...'
+                trimRight
+                basedOn='letters'
+                />
+            </div>
+            </div>
+            ))}
+        </div>
+    );
+}
+
 export const RouteCreate = () => {
     const [isTinder, setIsTinder] = useState(false);
     const [places, setPlaces] = useState([]);
+    const [filters, setFilters] = useState();
     const [dateState, setDateState] = useState();
+    const [isCustomRoute, setIsCustomRoute] = useState(true);
+
     return (
+    <div className='RouteCreate'>
+    <RouteCreateToggle setDate={setDateState} isCustomRoute={isCustomRoute} setIsCustomRoute={value => { setIsCustomRoute(value)}}/>
+    { isCustomRoute ?
     <>
     {
     isTinder ? 
-    <RouteTinder places={places}/> :
-    <div className='RouteCreate'>
-        <RouteCreateToggle setDate={setDateState}/>
-        <CustomRoute dateState={dateState} onCustomCreate={(value) => { setIsTinder(true); setPlaces(value) }}/>
-    </div>
+        <RouteTinder places={places} filters={filters}/> :
+        <CustomRoute dateState={dateState} onCustomCreate={(value, data) => { console.log(value, data); setIsTinder(true); setPlaces(value); setFilters(data) }}/>
     }
-    </>
+    </> : 
+    <RoutesReady/>}
+    </div>
     );
 };
