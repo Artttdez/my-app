@@ -20,7 +20,7 @@
   forced-color-adjust: none;
 
   &[data-focus-within] {
-    outline: 2px solid var(--focus-ring-color);
+    outline: 2px solid #FFCF08;
     outline-offset: -1px;
   }
 }
@@ -43,7 +43,7 @@
 
   &:focus {
     color: var(--highlight-foreground);
-    background: var(--highlight-background);
+    background: #FFCF08;
     outline: none;
     border-radius: 4px;
     caret-color: transparent;

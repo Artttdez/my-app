@@ -157,3 +157,53 @@
     line-height: 32px;
     color:#a0a0a0;
   }
+
+  .Location {
+    display: flex;
+    color: black;
+    font-family: "Roboto", sans-serif;
+    padding: 10px 10px !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: white;
+    white-space: nowrap;
+    width: calc(100% - 16px);
+    forced-color-adjust: none;
+  
+    &[data-focus-within] {
+      outline: 2px solid #FFCF08;
+      outline-offset: -1px;
+    }
+  }
+
+.LocationWrapper {
+    position: relative;
+}
+
+.LocationButton {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    font-family: "Roboto", sans-serif;
+    background: white;
+    color: black;
+    forced-color-adjust: none;
+    border-radius: 4px;
+    border: none;
+    margin-left: -1.929rem;
+    width: 1.429rem;
+    height: 1.429rem;
+    padding: 0;
+    font-size: 0.857rem;
+    box-sizing: content-box;
+
+    &[data-pressed] {
+        box-shadow: none;
+        background: #FFCF08;
+      }
+  
+      &[data-focus-visible] {
+        outline: 2px solid #FFCF08;
+        outline-offset: 2px;
+      }
+}

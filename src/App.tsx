@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { RouteGo } from './screens/RouteGo/RouteGo';
 import { RouteCreate } from './screens/RouteCreate/RouteCreate';
+import { Callback } from './screens/Callback/Callback';
 
 import './App.css';
+
+const UserContext = createContext<{user: any}>({
+  user: null,
+});
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
+    <UserContext.Provider value={{ user: null }}>
     <QueryClientProvider client={queryClient}>
     <div className="App">
       <style>
@@ -27,12 +33,13 @@ function App() {
           <Route path="/route/create" element={<RouteCreate/>} />
           <Route path="/route/:id" element={<div>kkk2</div>} />
           <Route path="/route/:id/go" element={<RouteGo/>} />
-          <Route path="/callback" element={<div>Лалка</div>} />
+          <Route path="/callback" element={<Callback/>} />
         </Routes>
       </BrowserRouter>
       <Footer/>
     </div>
     </QueryClientProvider>
+    </UserContext.Provider>
   );
 }
 

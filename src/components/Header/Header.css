@@ -37,3 +37,15 @@ align-items: center;
 .react-aria-MenuItem {
     padding: 4px;
 }
+
+.UserAvatar {
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;
+
+    width: 30px;
+    height: 30px;
+    border-radius: 100%;
+    position: relative;
+    top: 0;
+}

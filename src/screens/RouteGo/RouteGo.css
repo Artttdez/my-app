@@ -218,3 +218,10 @@
 	transform: translateZ(-1.1325px);
 	border: 1px solid #FF9900;
 }
+
+.SheetRoutes-Distance {
+    font-size: 14px;
+    color: #6a6a6a;
+    text-align: center;
+    margin-top: 2px;
+}
