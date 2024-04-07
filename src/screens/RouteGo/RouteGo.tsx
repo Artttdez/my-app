@@ -11,7 +11,7 @@ import "../../aria/Button.css";
 
 import 'react-spring-bottom-sheet/dist/style.css'
 import './RouteGo.css';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { BACK_URL } from '../../contants';
 import { useParams } from 'react-router-dom';
 import LinesEllipsis from 'react-lines-ellipsis';
@@ -58,10 +58,10 @@ export const RouteGo = () => {
       <Breadcrumbs>
         <Breadcrumb><Link href="/">Главная</Link></Breadcrumb>
         <Breadcrumb><Link href="/react-aria/">Мои планы</Link></Breadcrumb>
-        <Breadcrumb><Link>Москва в июле</Link></Breadcrumb>
+        <Breadcrumb><Link>{data.title}</Link></Breadcrumb>
       </Breadcrumbs>
       </div>
-      <h1 className='RouteTabs-Title'>Москва в июле</h1>
+      <h1 className='RouteTabs-Title'>{data.title}</h1>
       <Tabs>
       <TabList aria-label="History of Ancient Rome">
         <Tab id="Plan">План</Tab>
@@ -416,6 +416,8 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
 
     const [rainRoutes, setRainRoutes] = useState<any>(undefined);
 
+    const actualRoutes = rainRoutes !== undefined ? rainRoutes : route.places[0];
+
     const onRain = useCallback(() => {
       const reachedPlaces = route.places[0].slice(0, currentPlace);
       const unReachedPlaces = route.places[0].slice(currentPlace, route.places[0].length).filter((item: any) => Boolean(item.categories.some((category: any) => category === "indoors")));
@@ -423,11 +425,69 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
       setRainRoutes([...reachedPlaces, ...unReachedPlaces]);
     }, [route, currentPlace, setPoints]);
 
+    const { mutate: onPauseReq } = useMutation(async (data: any) => {
+      let cookie = "";
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; AUTH_SESSION=`);
+      if (parts.length === 2) {
+          cookie = String(parts?.pop()?.split(';').shift());
+      };
+
+  
+    return await fetch(
+      BACK_URL + 'api/places/pause',
+      {
+          method: "POST",
+          headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+              "X-Auth-Session": cookie,
+          },
+          body: JSON.stringify(data),
+          credentials: 'include',
+        }
+    ).then(res => res.json());
+  }, {
+      onSuccess: (result) => { 
+        console.log()
+        const reachedPlaces = route.places[0].slice(0, currentPlace);
+        setPoints([...reachedPlaces, result].map((item: any) => ([item.latitude, item.longitude])));
+        setRainRoutes([...reachedPlaces, result]);
+       },
+  })
+
+  const { data: articleData } = useQuery<any>(
+    'repupieData',
+    async () => {
+        let cookie = "";
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; AUTH_SESSION=`);
+        if (parts.length === 2) {
+            cookie = String(parts?.pop()?.split(';').shift());
+        };
+
+        console.log(cookie);
+        
+      return await fetch(
+        BACK_URL + 'api/places/id/' + route.places[0][currentPlace].id + '/articles',
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                "X-Auth-Session": cookie,
+            },
+            credentials: 'include',
+          }
+      ).then(res => res.json());
+    },
+    {
+        useErrorBoundary: true,
+    }
+  );
+
     const [data, setData] = useState('Отсканируйте QR-код');
     const [blockQR, setBlockQR] = useState(false); 
     const [result, setResult] = useState<'green' | 'red' | undefined>();
-
-    const actualRoutes = rainRoutes !== undefined ? rainRoutes : route.places[0];
 
     return (
         <div style={{ position: "relative" }}>
@@ -466,6 +526,9 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
 </svg>
             Дождь
             </div>
+          </Button>
+          <Button onPress={() => {onPauseReq(route.places[0][currentPlace + 1])}} isDisabled={currentPlace === 0}>
+          Сделать паузу
           </Button></div>} 
           footer={<div style={{ display: "flex", justifyContent: "center"}}>{
               (routeStatus === 'in_progress' || routeStatus === 'paused') &&
@@ -513,7 +576,7 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
              </div>
              </div>
              {
-              (id < route.places[0].length - 1) && <div className='MarshMove'>
+              (id < actualRoutes.length - 1) && <div className='MarshMove'>
                 <div className='MarshIcon'>
                 <svg className='MarshRoad' width="24" height="70" viewBox="0 0 24 70" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 1V69" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 10"/>
@@ -538,6 +601,33 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
              </>
               ))}
             </div>  
+            {
+                Boolean(articleData?.length > 0) && 
+                <>
+                <div className='ArticlesSubtitle'>Статьи</div>
+                <div className='Articles'>
+                {articleData?.map((article: any) => (
+                  <div className='Article'>
+                  <div style={{ height: "260px"}}>
+                    <img src={article.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover", borderTopLeftRadius: "16px", borderTopRightRadius: "16px" }}/>
+                  </div>
+                  <div className='ArticleTitle'>
+                    {article.title}
+                  </div>
+                  <LinesEllipsis
+                    className='MarshCardDescription'
+                    text={article.description}
+                    maxLine='3'
+                    ellipsis='...'
+                    trimRight
+                    basedOn='letters'
+                  />
+                </div>
+                ))}
+                </div>
+                </>
+            }
+                
             
             
             </BottomSheet> :
@@ -552,7 +642,7 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
                     if (!!result) {
                         setData(result?.getText() === route.places[0][currentPlace].verificationCode ? "Ура, вы получаете +10 баллов!" : "Неверный код, попробуйте еще раз");
                         setResult(result?.getText() === route.places[0][currentPlace].verificationCode ? "green" : "red");
-                        if (route.places[0][currentPlace].verificationCode) {
+                        if (result?.getText() === route.places[0][currentPlace].verificationCode) {
                           setBlockQR(true);
                           setCurrentPlace(place => place + 1);
                         }

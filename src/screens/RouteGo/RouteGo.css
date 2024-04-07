@@ -366,3 +366,29 @@
       transform: scale(1) translate(-50%, -50%);
     }
   }
+
+.Articles {
+    background-color: #EBEBEB;
+    max-width: 600px;
+    margin: 24 auto 24px;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.ArticleTitle {
+    margin-top: 8px;
+    font-family: "Proto Grotesk Web";
+}
+
+.ArticlesSubtitle {
+    margin-top: 24px;
+    font-family: "Proto Grotesk Web";
+    font-size: 20px;
+    line-height: 24px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    padding: 12px;
+    background-color: #EBEBEB;
+}
