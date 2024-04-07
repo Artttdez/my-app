@@ -14,105 +14,43 @@ import './RouteGo.css';
 import { useQuery } from 'react-query';
 import { BACK_URL } from '../../contants';
 import { useParams } from 'react-router-dom';
+import LinesEllipsis from 'react-lines-ellipsis';
 
 export const RouteGo = () => {
   const { id } = useParams();
 
-  // const { data } = useQuery<any>(
-  //   'pipsusData',
-  //   async () => {
-  //       let cookie = "";
-  //       const value = `; ${document.cookie}`;
-  //       const parts = value.split(`; AUTH_SESSION=`);
-  //       if (parts.length === 2) {
-  //           cookie = String(parts?.pop()?.split(';').shift());
-  //       };
+  const { data } = useQuery<any>(
+    'pipsusData',
+    async () => {
+        let cookie = "";
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; AUTH_SESSION=`);
+        if (parts.length === 2) {
+            cookie = String(parts?.pop()?.split(';').shift());
+        };
    
-  //     return await fetch(
-  //       BACK_URL + 'api/routes/' + id + '/',
-  //       {
-  //           headers: {
-  //               "Access-Control-Allow-Origin": "*",
-  //               "Content-Type": "application/json",
-  //               "X-Auth-Session": cookie,
-  //           },
-  //           credentials: 'include',
-  //         }
-  //     ).then(res => res.json());
-  //   },
-  //   {
-  //       useErrorBoundary: true,
-  //   }
-  // );
-
-  const data = {
-    "id": "3c8050f7-43ea-4fe5-941c-188e942cd7ce",
-    "owner": {
-        "id": "740f422b-e8ff-45dc-9ac3-5ee0a296e6a0",
-        "firstName": "Даниил",
-        "realName": "Даниил Орешников",
-        "email": "d0reshnikov@yandex.ru",
-        "profilePhotoUrl": "https://avatars.yandex.net/get-yapic/30061/SEtb2NOMvVnQy8sg80S4wrNoz5g-1/islands-retina-50",
-        "createdAt": "2024-04-06T20:35:20.363369Z",
-        "birthDate": null,
-        "bonusQuantityNow": 0,
-        "bonusQuantityTotal": 0
-    },
-    "title": "Исторический центр Москвы",
-    "city": "Москва",
-    "description": "Прогулка по историческому центру Москвы с посещением главных достопримечательностей города.",
-    "audioGuideUrl": null,
-    "rating": 4.5,
-    "places": [
-        [
-            {
-                "id": "b02a7b52-b175-4a75-8fb7-be1ac807c7b1",
-                "isService": false,
-                "title": "Красная площадь",
-                "description": "Историческая площадь в центре Москвы, знаменита своими парадами и архитектурными достопримечательностями.",
-                "area": "center",
-                "metroStation": "Охотный Ряд",
-                "rating": 4.9,
-                "openHoursFrom": "2024-01-01T00:00:00Z",
-                "openHoursTo": "2024-01-01T23:59:59Z",
-                "categories": [],
-                "verificationCode": "b02a7b52-b175-4a75-8fb7-be1ac807c7b1",
-                "s3Album": "https://drive.google.com/thumbnail?id=1_E8bzDeKpcsq2uC22LcuPGjb2SNNL0HW",
-                "latitude": 55.753913,
-                "longitude": 37.620836,
-                "validFrom": null,
-                "validTo": null,
-                "price": null
+      return await fetch(
+        BACK_URL + 'api/routes/id/' + id + '',
+        {
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                "X-Auth-Session": cookie,
             },
-            {
-              "id": "88b9a97c-74ec-487d-8df1-7542009f6e78",
-              "isService": true,
-              "title": "Баррикадная",
-              "description": "service_metro",
-              "area": "",
-              "metroStation": "Баррикадная",
-              "rating": null,
-              "openHoursFrom": null,
-              "openHoursTo": null,
-              "categories": [],
-              "verificationCode": null,
-              "s3Album": null,
-              "latitude": 55.76027,
-              "longitude": 37.58111,
-              "validFrom": null,
-              "validTo": null,
-              "price": null
+            credentials: 'include',
           }
-        ]
-    ],
-    "createdAt": "2024-04-01T10:00:00Z",
-    "bonusForRoute": 40,
-    "isVisited": false,
-    "lastVisitedPlace": -1,
-    "gift": null
-  };
+      ).then(res => res.json());
+    },
+    {
+        useErrorBoundary: true,
+    }
+  );
 
   const [routeStatus, setRouteStatus] = useState<'start' | 'in_progress' | 'paused' | 'finished'>('start');
+
+  if (!data?.places?.length) {
+    return <span>"Загрузка"</span>;
+  }
 
   return (
     <div className='RouteTabs'>
@@ -224,10 +162,32 @@ export const RoutePlan = ({ route, routeStatus, setRouteStatus }: { route: any, 
         }
       }, [map, points, api, routeType, setRoutes]);
 
+      const calcCrow = (lat1: number, lon1: number, lat2: number, lon2: number) =>
+      {
+        var R = 6371; // km
+        var dLat = toRad(lat2-lat1);
+        var dLon = toRad(lon2-lon1);
+        var lat1 = toRad(lat1);
+        var lat2 = toRad(lat2);
+  
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c;
+        return d;
+      }
+  
+      // Converts numeric degrees to radians
+      const toRad = (value: number) =>
+      {
+          return value * Math.PI / 180;
+      }
+
+
 
     useEffect(() => {
       if (route.places) {
-       setPoints(route.places[0].map((item: any) => ([item.latitude, item.longitude])));
+       setPoints(route?.places[0]?.map((item: any) => ([item.latitude, item.longitude])));
       }
     }, [route]);
 
@@ -306,10 +266,9 @@ export const RoutePlan = ({ route, routeStatus, setRouteStatus }: { route: any, 
             </div>
             <div className='Marsh'>
               {route.places[0].map((item: any, id: number) => (
+                <>
                 <div className='MarshItem'>
-                  <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: "100%", background: "#FFCF08"}}>
-                  {getLetter(id)}
-                  </div>
+                  <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", background: "#FFCF08", borderRadius: "100%"}}>{getLetter(id)}</div>
                  <div className='MarshImage' style={{ background: 'url(' + item.s3Album + ')' + ' no-repeat cover', width: "48px", height: "48px", borderRadius: "8px" }}  >
                  <img src={item.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover",  borderRadius: "8px" }} />
                  </div>
@@ -318,8 +277,30 @@ export const RoutePlan = ({ route, routeStatus, setRouteStatus }: { route: any, 
                <div className='MarshArea'>{item.metroStation}</div>
              </div>
              </div>
-              ))}
-            </div>
+             {
+              (id < route.places[0].length - 1) && <div className='MarshMove'>
+                <div className='MarshIcon'>
+                <svg className='MarshRoad' width="24" height="70" viewBox="0 0 24 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1V69" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 10"/>
+                </svg>
+                <svg className='MarshMan' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2352_149415)">
+<rect width="24" height="24" fill="white"/>
+<path d="M15.3365 23.0247L12.3773 17.457L10.0374 14.6722C9.69173 14.1277 9.50938 13.5068 9.50938 12.8743V7.60791M9.50938 7.60791H10.3262C10.6015 7.60785 10.8742 7.65828 11.1286 7.75633C11.383 7.85438 11.6142 7.99813 11.809 8.17936C12.0037 8.3606 12.1582 8.57577 12.2635 8.81258C12.3689 9.0494 12.4232 9.30322 12.4232 9.55956V17.457M9.50938 7.60791C7.56719 7.60791 5.625 11.2244 5.625 11.2244V14.6722M17.875 13.375L15 10.4375M6.4375 23L9.50938 18.8125" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.481 5C12.5855 5 13.481 4.10457 13.481 3C13.481 1.89543 12.5855 1 11.481 1C10.3764 1 9.48096 1.89543 9.48096 3C9.48096 4.10457 10.3764 5 11.481 5Z" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_2352_149415">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+</div>
+
+                <span className='MarshTime'>{Number((calcCrow(item.latitude, item.longitude, route.places[0][id + 1].latitude, route.places[0][id + 1].longitude)/0.1).toFixed(1))} минут</span>
+              </div>
+}</>))}
+</div>
             </BottomSheet>
         </div>
     );
@@ -327,6 +308,8 @@ export const RoutePlan = ({ route, routeStatus, setRouteStatus }: { route: any, 
 
 export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any, routeStatus: 'start' | 'in_progress' | 'paused' | 'finished', setRouteStatus(value: 'start' | 'in_progress' | 'paused' | 'finished'): void }) => {
   const [open, setOpen] = useState(true);
+
+  const [currentPlace, setCurrentPlace] = useState(0);
 
   const [openQR, setOpenQR] = useState(false);
 
@@ -382,6 +365,48 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
         }
       }, [map, points, api, routeType, setRoutes]);
 
+      const calcCrow = (lat1: number, lon1: number, lat2: number, lon2: number) =>
+      {
+        var R = 6371; // km
+        var dLat = toRad(lat2-lat1);
+        var dLon = toRad(lon2-lon1);
+        var lat1 = toRad(lat1);
+        var lat2 = toRad(lat2);
+  
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c;
+        return d;
+      }
+  
+      // Converts numeric degrees to radians
+      const toRad = (value: number) =>
+      {
+          return value * Math.PI / 180;
+      }
+
+      const getLetter = (number: number) => {
+        // Define a mapping of numbers to letters
+    const letterMap: { [key: string]: string } = {
+      1: 'A',
+      2: 'B',
+      3: 'C',
+      4: 'D',
+      5: 'E',
+      6: 'F',
+      7: 'G',
+      8: 'H',
+      9: 'I',
+      // Add more mappings as needed
+    };
+  
+    // Return the corresponding letter for the input number
+    return letterMap[number + 1];
+      };
+
+    console.log(currentPlace);
+
 
     useEffect(() => {
       if (route.places) {
@@ -390,6 +415,7 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
     }, [route]);
 
     const [data, setData] = useState('Отсканируйте QR-код');
+    const [blockQR, setBlockQR] = useState(false); 
     const [result, setResult] = useState<'green' | 'red' | undefined>();
 
     return (
@@ -407,7 +433,7 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
                 <ZoomControl />
               </Map>
             </YMaps>
-            <Button className="QRAction" onPress={() => { setOpenQR(true) }}>
+            <Button className="QRAction" onPress={() => { setOpenQR(true) }} isDisabled={routeStatus !== "in_progress"}>
             <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="System / Qr_Code">
 <path id="Vector" d="M19 20H20M16 20H14V17M17 17H20V14H19M14 14H16M4 16.9997C4 16.0679 4 15.6019 4.15224 15.2344C4.35523 14.7443 4.74432 14.3552 5.23438 14.1522C5.60192 14 6.06786 14 6.99974 14C7.93163 14 8.39808 14 8.76562 14.1522C9.25568 14.3552 9.64467 14.7443 9.84766 15.2344C9.9999 15.6019 9.9999 16.0681 9.9999 17C9.9999 17.9319 9.9999 18.3978 9.84766 18.7654C9.64467 19.2554 9.25568 19.6447 8.76562 19.8477C8.39808 19.9999 7.93162 19.9999 6.99974 19.9999C6.06786 19.9999 5.60192 19.9999 5.23438 19.8477C4.74432 19.6447 4.35523 19.2557 4.15224 18.7656C4 18.3981 4 17.9316 4 16.9997ZM14 6.99974C14 6.06786 14 5.60192 14.1522 5.23438C14.3552 4.74432 14.7443 4.35523 15.2344 4.15224C15.6019 4 16.0679 4 16.9997 4C17.9316 4 18.3981 4 18.7656 4.15224C19.2557 4.35523 19.6447 4.74432 19.8477 5.23438C19.9999 5.60192 19.9999 6.06812 19.9999 7C19.9999 7.93188 19.9999 8.39783 19.8477 8.76537C19.6447 9.25542 19.2557 9.64467 18.7656 9.84766C18.3981 9.9999 17.9316 9.9999 16.9997 9.9999C16.0679 9.9999 15.6019 9.9999 15.2344 9.84766C14.7443 9.64467 14.3552 9.25568 14.1522 8.76562C14 8.39808 14 7.93163 14 6.99974ZM4 6.99974C4 6.06786 4 5.60192 4.15224 5.23438C4.35523 4.74432 4.74432 4.35523 5.23438 4.15224C5.60192 4 6.06786 4 6.99974 4C7.93163 4 8.39808 4 8.76562 4.15224C9.25568 4.35523 9.64467 4.74432 9.84766 5.23438C9.9999 5.60192 9.9999 6.06812 9.9999 7C9.9999 7.93188 9.9999 8.39783 9.84766 8.76537C9.64467 9.25542 9.25568 9.64467 8.76562 9.84766C8.39808 9.9999 7.93162 9.9999 6.99974 9.9999C6.06786 9.9999 5.60192 9.9999 5.23438 9.84766C4.74432 9.64467 4.35523 9.25568 4.15224 8.76562C4 8.39808 4 7.93163 4 6.99974Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -435,16 +461,58 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
               ]}
             >
             <div className='Marsh'>
-              {route.places[0].map((item: any) => (
-                <div className='MarshItem'>
-                 <div className='MarshImage' style={{ background: 'url(' + item.s3Album + ')' + ' no-repeat cover', width: "48px", height: "48px", borderRadius: "8px" }}  >
+              {route.places[0].map((item: any, id: number) => (
+                <>
+                <div className='MarshItem' style={{...(id === currentPlace && { background: "#F5F5F5", borderRadius: "12px", padding: "8px", alignItems: "flex-start", left: "-8px", width: "100%", position: "relative" })}}>
+                <div style={{ width: "24px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center", background: (routeStatus !== "start" && currentPlace > id) ? "green" : "#FFCF08", borderRadius: "100%"}}>{getLetter(id)}</div>
+                 <div className='MarshImage' style={{ background: 'url(' + item.s3Album + ')' + ' no-repeat cover', ...(id === currentPlace ? {width: "72px", height: "72px"} : {width: "48px", height: "48px"}), borderRadius: "8px" }}  >
                  <img src={item.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover",  borderRadius: "8px" }} />
                  </div>
              <div className='MarshContent'>
                <div className='MarshTitle'>{item.title}</div>
                <div className='MarshArea'>{item.metroStation}</div>
+               {
+                id === currentPlace &&
+               <LinesEllipsis
+                className='MarshCardDescription'
+                text={item.description}
+                maxLine='4'
+                ellipsis='...'
+                trimRight
+                basedOn='letters'
+                />
+               }
+                {
+                  (id === currentPlace && item.price) && <Button style={{ marginTop: "12px"}}>
+                    Купить за {item.price} рублей
+                  </Button>
+                }
              </div>
              </div>
+             {
+              (id < route.places[0].length - 1) && <div className='MarshMove'>
+                <div className='MarshIcon'>
+                <svg className='MarshRoad' width="24" height="70" viewBox="0 0 24 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 1V69" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 10"/>
+                </svg>
+                <svg className='MarshMan' width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_2352_149415)">
+<rect width="24" height="24" fill="white"/>
+<path d="M15.3365 23.0247L12.3773 17.457L10.0374 14.6722C9.69173 14.1277 9.50938 13.5068 9.50938 12.8743V7.60791M9.50938 7.60791H10.3262C10.6015 7.60785 10.8742 7.65828 11.1286 7.75633C11.383 7.85438 11.6142 7.99813 11.809 8.17936C12.0037 8.3606 12.1582 8.57577 12.2635 8.81258C12.3689 9.0494 12.4232 9.30322 12.4232 9.55956V17.457M9.50938 7.60791C7.56719 7.60791 5.625 11.2244 5.625 11.2244V14.6722M17.875 13.375L15 10.4375M6.4375 23L9.50938 18.8125" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11.481 5C12.5855 5 13.481 4.10457 13.481 3C13.481 1.89543 12.5855 1 11.481 1C10.3764 1 9.48096 1.89543 9.48096 3C9.48096 4.10457 10.3764 5 11.481 5Z" stroke="#007470" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_2352_149415">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>
+</div>
+
+                <span className='MarshTime'>{Number((calcCrow(item.latitude, item.longitude, route.places[0][id + 1].latitude, route.places[0][id + 1].longitude)/0.1).toFixed(1))} минут</span>
+              </div>
+             }
+             </>
               ))}
             </div>  
             
@@ -455,11 +523,16 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
               ]}
             >
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center"}}>
+              { !blockQR &&
               <QrReader
                 onResult={(result, error) => {
                     if (!!result) {
-                        setData(result?.getText() === "kok" ? "Ура, вы получаете +10 баллов!" : "Неверный код, попробуйте еще раз");
-                        setResult(result?.getText() === "kok" ? "green" : "red")
+                        setData(result?.getText() === route.places[0][currentPlace].verificationCode ? "Ура, вы получаете +10 баллов!" : "Неверный код, попробуйте еще раз");
+                        setResult(result?.getText() === route.places[0][currentPlace].verificationCode ? "green" : "red");
+                        if (route.places[0][currentPlace].verificationCode) {
+                          setBlockQR(true);
+                          setCurrentPlace(place => place + 1);
+                        }
                     }
 
                     if (!!error) {
@@ -467,8 +540,15 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
                     }
                 } }
                 className='QR' constraints={{}}/>
+              }
+              {
+                blockQR &&
+                <svg width="72" height="72" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.5 13L14.1625 20L10.5 16.5M28 16C28 22.6274 22.6274 28 16 28C9.37258 28 4 22.6274 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" stroke="#039855" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              }
               <p style={{ color: result }}>{data}</p>
-              <Button style={{ margin: "0 auto" }} onPress={() => { setOpenQR(false)}}>{result === 'green' ? "Ура, здорово!" : "Выйти"}</Button>
+              <Button style={{ margin: "0 auto" }} onPress={() => { setOpenQR(false); setResult(undefined); setData("Отсканируйте QR-код"); setBlockQR(false);}}>{result === 'green' ? "Ура, здорово!" : "Выйти"}</Button>
               </div>
             </BottomSheet>
           }

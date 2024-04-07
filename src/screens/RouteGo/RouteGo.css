@@ -271,7 +271,10 @@
 }
 
 .Marsh {
-    padding: 24px 8px 0;
+    padding: 24px 8px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .MarshItem {
@@ -284,4 +287,39 @@
     font-weight: 600;
     font-size: 16px;
     line-height: 20px;
+}
+
+.MarshIcon {
+    position: relative;
+    width: 24px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.MarshMan {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.MarshMove {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+}
+
+.MarshTime {
+    position: relative;
+    left: -4px;
+    color: #6a6a6a;
+}
+
+.MarshCardDescription {
+    max-width: 250px;
+    margin-top: 12px;
+
+    font-size: 14px;
 }
