@@ -370,8 +370,7 @@
 .Articles {
     background-color: #EBEBEB;
     max-width: 600px;
-    margin: 24 auto 24px;
-    padding: 12px;
+    padding: 12px 12px 36px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
@@ -391,4 +390,30 @@
     border-top-left-radius: 20px;
     padding: 12px;
     background-color: #EBEBEB;
+}
+
+.Recommedations {
+    background-color: #cecece;
+    max-width: 600px;
+    margin: 24 auto 24px;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.RecommedationTitle {
+    margin-top: 8px;
+    font-family: "Proto Grotesk Web";
+}
+
+.RecommedationsSubtitle {
+    margin-top: -12px;
+    font-family: "Proto Grotesk Web";
+    font-size: 20px;
+    line-height: 24px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    padding: 12px;
+    background-color: #cecece;
 }

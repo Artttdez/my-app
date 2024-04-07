@@ -485,6 +485,37 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
     }
   );
 
+  const { data: recomData } = useQuery<any>(
+    'repupierecoData',
+    async () => {
+        let cookie = "";
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; AUTH_SESSION=`);
+        if (parts.length === 2) {
+            cookie = String(parts?.pop()?.split(';').shift());
+        };
+
+        console.log(cookie);
+        
+      return await fetch(
+        BACK_URL + 'api/places/interesting-near',
+        {
+            method: "POST",
+            headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                "X-Auth-Session": cookie,
+            },
+            body: JSON.stringify(route.places[0][currentPlace]),
+            credentials: 'include',
+          }
+      ).then(res => res.json());
+    },
+    {
+        useErrorBoundary: true,
+    }
+  );
+
     const [data, setData] = useState('Отсканируйте QR-код');
     const [blockQR, setBlockQR] = useState(false); 
     const [result, setResult] = useState<'green' | 'red' | undefined>();
@@ -617,6 +648,35 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
                   <LinesEllipsis
                     className='MarshCardDescription'
                     text={article.description}
+                    maxLine='3'
+                    ellipsis='...'
+                    trimRight
+                    basedOn='letters'
+                  />
+                </div>
+                ))}
+                </div>
+                </>
+            }
+            {
+                Boolean(recomData?.length > 0) && 
+                <>
+                <div className='RecommedationsSubtitle'>Интересное рядом</div>
+                <div className='Recommedations'>
+                {recomData?.map((recom: any) => (
+                  <div className='Recommedation'>
+                  <div style={{ height: "260px"}}>
+                    <img src={recom.s3Album} style={{ width: "100%", height: "100%", objectFit: "cover", borderTopLeftRadius: "16px", borderTopRightRadius: "16px" }}/>
+                  </div>
+                  <div className='RecommedationTitle'>
+                    {recom.title}
+                  </div>
+                  <div className='RecommedationTitle'>
+                    {recom.metroStation}
+                  </div>
+                  <LinesEllipsis
+                    className='MarshCardDescription'
+                    text={recom.description}
                     maxLine='3'
                     ellipsis='...'
                     trimRight
