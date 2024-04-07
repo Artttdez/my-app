@@ -1,0 +1,10 @@
+.Routen {
+    background-color: #EBEBEB;
+    border-radius: 20px;
+    max-width: 600px;
+    margin: 0 auto 24px;
+}
+
+.Routen-Inside {
+    padding: 12px;
+}

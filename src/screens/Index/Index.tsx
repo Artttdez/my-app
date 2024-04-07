@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Calendar, CalendarCell, CalendarGrid, DateInput, DatePicker, DateSegment, Dialog, Group, Heading, Input, Popover } from 'react-aria-components';
+import { Button, Calendar, CalendarCell, CalendarGrid, DateInput, DatePicker, DateSegment, Dialog, Group, Heading, Input, Link, Popover } from 'react-aria-components';
 
 import './Index.css';
 
@@ -20,7 +20,9 @@ export const Index = () => {
                 </div>
                 </div>
                 <div style={{ width: "calc(100%)"}}>
-                    <Input className='Location' style={{ width: "calc(100% - 22px)"}} placeholder="Найти место или событие..." />
+                    <Link href="/route/create">
+                        <Input className='Location' style={{ width: "calc(100% - 22px)"}} placeholder="Найти место или событие..." />
+                    </Link>
                     <DatePicker style={{ marginTop: "4px" }}>
   <Group style={{ width: "calc(100% - 8px)" }}>
     <DateInput>

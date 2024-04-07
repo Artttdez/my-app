@@ -28,9 +28,7 @@ function App() {
         <Header/>
         <Routes>
           <Route path="/" element={<Index/>} />
-          <Route path="/about" element={<div>kkk</div>} />
-          <Route path="/portfolio" element={<div>kkk</div>} />
-          <Route path="/contact" element={<div>kkk</div>} />
+          <Route path="/route/:id" element={<Route/>} />
           <Route path="/route/create" element={<RouteCreate/>} />
           <Route path="/route/:id" element={<div>kkk2</div>} />
           <Route path="/route/:id/go" element={<RouteGo/>} />

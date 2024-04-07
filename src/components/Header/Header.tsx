@@ -12,7 +12,12 @@ export const Header = () => {
         window.location.replace('https://russpass-hack.onrender.com/login-yandex');
     }
 
-
+    let cookieState = "";
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; AUTH_SESSION=`);
+            if (parts.length === 2) {
+                cookieState = String(parts?.pop()?.split(';').shift());
+            };
 
     const { data } = useQuery<any>(
         'repoData',
@@ -40,6 +45,7 @@ export const Header = () => {
         },
         {
             useErrorBoundary: true,
+            enabled: cookieState !== ""
         }
       );
 

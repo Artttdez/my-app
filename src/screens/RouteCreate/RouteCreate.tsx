@@ -462,7 +462,7 @@ export const RouteCreateToggle = ({ setDate, isCustomRoute, setIsCustomRoute }: 
                 </Label>
                 <div className='Toggle'>
             <Button className={isCustomRoute ? "Toggle-Transparent" : undefined} onPress={() => setIsCustomRoute(false)}>
-    Готовые маршруты
+    Готовые&nbsp;маршруты
 </Button>
 <Button className={isCustomRoute ? undefined : "Toggle-Transparent"} onPress={() => setIsCustomRoute(true)}>
     Свой маршрут
@@ -508,7 +508,7 @@ export const RoutesReady = () => {
             };
        
           return await fetch(
-            BACK_URL + 'api/routes/debug/all',
+            BACK_URL + 'api/routes/my',
             {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
@@ -523,6 +523,10 @@ export const RoutesReady = () => {
             useErrorBoundary: true,
         }
       );
+
+    if (!data?.length) {
+        return <span>Загрузка...</span>;
+    }
 
     return (
         <div style={{ paddingBottom: "8px" }}>
@@ -540,7 +544,7 @@ export const RoutesReady = () => {
                     </TagGroup>
                     </div>
                 <div className='RouteSmallImage' style={{ width: "100%", height: "200px" }}  >
-                <img src={item.places[0][0].s3Album} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <img src={item.places[0][0].s3Album} style={{ width: "100%", height: "100%", objectFit: "cover", borderTopLeftRadius: "16px", borderTopRightRadius: "16px" }} />
                 </div>
             <div className='RouteSmallContent'>
               <div className='RouteSmallTitle'>{item.title}</div>
