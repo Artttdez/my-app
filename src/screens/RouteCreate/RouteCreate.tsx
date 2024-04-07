@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { TagGroup, Label, TagList, Tag, CheckboxGroup, Checkbox, Group, Button, Calendar, CalendarCell, CalendarGrid, DateInput, DatePicker, DateSegment, Dialog, Heading, Popover, DialogTrigger, OverlayArrow, Switch, ComboBox, Input, ListBox, ListBoxItem } from 'react-aria-components';
+import { TagGroup, Label, TagList, Tag, CheckboxGroup, Checkbox, Group, Button, Calendar, CalendarCell, CalendarGrid, DateInput, DatePicker, DateSegment, Dialog, Heading, Popover, DialogTrigger, OverlayArrow, Switch, ComboBox, Input, ListBox, ListBoxItem, Link } from 'react-aria-components';
 import LinesEllipsis from 'react-lines-ellipsis';
 import { useMutation, useQuery } from 'react-query';
 
@@ -525,13 +525,13 @@ export const RoutesReady = () => {
       );
 
     if (!data?.length) {
-        return <span>Загрузка...</span>;
+        return <span className="loader" />;
     }
 
     return (
         <div style={{ paddingBottom: "8px" }}>
             {data?.map((item: any) => (
-                <div className={'RouteSmallCard'}>
+                <Link href={`/route/${item.id}/go`} className={'RouteSmallCard'}>
                     <div className={'RouteSmallTags'}>
                     <TagGroup selectionMode='none' onSelectionChange={() => {}}>
                     <TagList>
@@ -566,7 +566,7 @@ export const RoutesReady = () => {
                 basedOn='letters'
                 />
             </div>
-            </div>
+            </Link>
             ))}
         </div>
     );

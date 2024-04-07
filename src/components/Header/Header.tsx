@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Menu, MenuItem, MenuTrigger, Popover } from 'react-aria-components';
-import { useMutation, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { BACK_URL } from '../../contants';
 
@@ -8,10 +8,9 @@ import './Header.css';
 
 export const Header = () => {
     // const { mutate: onLogin } = useMutation(async () => { console.log(22); await fetch(BACK_URL + '/callback-oauth-yandex')});
+    const history = useNavigate();
 
     const onLogin = () => {
-        const history = useNavigate();
-
         // Redirect to a specific page
         history('https://russpass-hack.onrender.com/login-yandex');
     }
