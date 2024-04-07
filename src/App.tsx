@@ -6,6 +6,7 @@ import { Footer } from './components/Footer/Footer';
 import { RouteGo } from './screens/RouteGo/RouteGo';
 import { RouteCreate } from './screens/RouteCreate/RouteCreate';
 import { Callback } from './screens/Callback/Callback';
+import { Index } from './screens/Index/Index';
 
 import './App.css';
 
@@ -26,7 +27,7 @@ function App() {
       <BrowserRouter>
         <Header/>
         <Routes>
-          <Route path="/" element={<div>kkk</div>} />
+          <Route path="/" element={<Index/>} />
           <Route path="/about" element={<div>kkk</div>} />
           <Route path="/portfolio" element={<div>kkk</div>} />
           <Route path="/contact" element={<div>kkk</div>} />
