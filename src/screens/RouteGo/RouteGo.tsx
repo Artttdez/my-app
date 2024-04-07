@@ -631,7 +631,12 @@ export const RouteOnTrip = ({ route, routeStatus, setRouteStatus }: { route: any
              }
              </>
               ))}
-            </div>  
+            </div> 
+            <div style={{ display: "flex", justifyContent: "center"}}>
+            <Button>
+              Взглянуть в прошлое
+            </Button> 
+            </div>
             {
                 Boolean(articleData?.length > 0) && 
                 <>
